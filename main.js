@@ -1,3 +1,4 @@
+"use strict";
 /*
 Appel à l'api JC Decaux
 15109 : CEVENNES Home
@@ -44,7 +45,7 @@ var optionsget = {
 /* ========================================================================
  Function
 ======================================================================== */
-afficheInfoStation = function (s) {
+var afficheInfoStation = function (s) {
 console.log(s);
     if (s.status === 'CLOSED'){
         console.error('Station '+s.name+' fermée !');
@@ -68,7 +69,7 @@ var optionsgetStation = function(num){
  Main
 ======================================================================== */
 
-optionAppel = optionsgetStation(0);
+var optionAppel = optionsgetStation(0);
 if(debug)console.info('Options prepared:');
 if(debug)console.info(optionAppel);
 if(debug)console.info('Do the GET call');
