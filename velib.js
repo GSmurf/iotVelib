@@ -14,16 +14,12 @@ var Station = function(st){
 };
 
 var Velib = {
-    getInfo: function(stationTest, affiche){
-        request.get({url:'https://api.jcdecaux.com/vls/v1/stations/'+stationTest+'?contract='+contract_name+'&apiKey='+api_key,
+    getInfo: function(obj){
+        request.get({url:'https://api.jcdecaux.com/vls/v1/stations/'+obj.id+'?contract='+contract_name+'&apiKey='+api_key,
             contract:contract_name,
             json:true}, function (e, r, st) {
-                var station = new Station(st);
-                if (affiche === undefined) {
-                    Velib.afficheStation(station);
-                }else{
-                    return station;
-                };
+                obj.variable = new Station(st);
+                Velib.afficheStation(obj.variable);
             }
         );
     },
@@ -62,6 +58,14 @@ var Velib = {
     }
 };
 
-Velib.getInfo(15109); // 15109 : CEVENNES Home
-Velib.getInfo(15032); // 15032 : LOURMEL M 8
-Velib.getInfo(15064); // 15064 : JAVEL M 10
+var cevennes = {id:15109, variable};
+var lourmel = {id:15032, variable};
+var javel = {id:15064, variable};
+
+Velib.getInfo(cevennes); // 15109 : CEVENNES Home
+Velib.getInfo(lourmel); // 15032 : LOURMEL M 8
+Velib.getInfo(javel); // 15064 : JAVEL M 10
+
+setTimeout(function(){
+    Velib.afficheStation(javel.variable);
+}, 3000);
