@@ -1,4 +1,5 @@
 # iotVelib
+Recherche des velibs disponibles et vérifie si un trajet est possible.
 
 TODO LIST
 ===

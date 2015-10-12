@@ -1,0 +1,28 @@
+{
+  "name": "iotVelib",
+  "version": "0.0.0",
+  "description": "recherche des velibs disponibles",
+  "main": "main.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git://github.com/GSmurf/iotVelib.git"
+  },
+  "keywords": [
+    "velib",
+    "api",
+    "jcdecaux"
+  ],
+  "author": "Stéphane SALLES",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/GSmurf/iotVelib/issues"
+  },
+  "homepage": "https://github.com/GSmurf/iotVelib",
+  "devDependencies": {
+    "request": "^2.65.0",
+    "promise": "^7.0.4"
+  }
+}

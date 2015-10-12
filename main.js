@@ -1,10 +1,9 @@
 "use strict";
-
-// var Velib = require('./lib/Velib');
+var Velib = require('./lib/velib');
 
 var trajets = [];
-var Velib = require('./lib/Velib');
 var velib = new Velib();
+
 velib.checkTrajet(15064, 15109, "retour homy du M10").then(function(trajet){
     trajets.push(trajet);
     afficheLesTrajets(trajets);
