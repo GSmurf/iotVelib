@@ -28623,18 +28623,34 @@ module.exports = {
   JCDecaux: {
     api_key: '32e916af1279a6c523ca33b1d1026298af3806e7',
     contract_name: 'Paris',
-    stations_check: [{number: 15109,
-                     name: 'CEVENNES',
-                     alias: 'Home'
-                     },
-                     {number: 15032,
-                     name: 'LOURMEL',
-                     alias: 'M 8'
-                     },
-                     {number: 15064,
-                     name: 'JAVEL',
-                     alias: 'M 10'
-                     }]
+    stations_check: [
+        {number: 15109,
+        name: 'CEVENNES',
+        alias: 'Home'
+        },
+        {number: 15032,
+        name: 'LOURMEL',
+        alias: 'M 8'
+        },
+        {number: 15062,
+        name: 'BOUCICAUT',
+        alias: 'M 8'
+        },
+        {number: 15064,
+        name: 'JAVEL',
+        alias: 'M 10'
+        },
+        {number: 15056,
+        name: 'BALARD',
+        alias: 'T3'
+        }],
+    trajets_check: [
+        {from:15109,
+        to: 15032,
+        name: 'Départ au travail M8'},
+        {from:15109,
+        to: 15064,
+        name: 'Départ au travail M10'}]
   },
   Parrot: {
     api_key: 'I2PzZ9pZet1Zmyt1qvaoBNpkMJ8ta2dxJOtXpIvW9v1Mz5vZ'
@@ -28645,21 +28661,32 @@ module.exports = {
 },{}],250:[function(require,module,exports){
 "use strict";
 var Velib = require('../lib/velib');
+var config = require('../config/config').JCDecaux;
 
 var trajets = [];
+var stations = [];
 var velib = new Velib();
 
-velib.checkTrajet(15062, 15109, "retour homy du M8").then(function(trajet){
-    trajets.push(trajet);
-    velib.checkTrajet(15064, 15109, "retour homy du M10").then(function(trajet){
+
+for (var i = config.trajets_check.length - 1; i >= 0; i--) {
+    var trajet = config.trajets_check[i];
+    velib.checkTrajet(trajet.from, trajet.to, trajet.name).then(function(trajet){
         trajets.push(trajet);
         afficheLesTrajets(trajets);
     }, function(reason){
         afficheLesTrajets();
     });
-}, function(reason){
-    afficheLesTrajets();
-});
+};
+
+for (var i = config.stations_check.length - 1; i >= 0; i--) {
+    var station = config.stations_check[i];
+    velib.getInfo(station.number).then(function(station){
+        stations.push(station);
+        afficheLesStations(station);
+    }, function(reason){
+        afficheLesStations();
+    });
+};
 
 var afficheLesTrajets = function(trajets){
     for (var i = trajets.length - 1; i >= 0; i--) {
@@ -28671,7 +28698,15 @@ var afficheLesTrajets = function(trajets){
         document.getElementById("mesTrajets").appendChild(node);     // Append <li> to <ul> with id="myList"
     };
 };
-},{"../lib/velib":251}],251:[function(require,module,exports){
+
+var afficheLesStations = function(stations){
+    var ret = velib.afficheStation(stations);
+    var node = document.createElement("LI");                 // Create a <li> node
+    var textnode = document.createTextNode(ret);         // Create a text node
+    node.appendChild(textnode);                              // Append the text to <li>
+    document.getElementById("mesStations").appendChild(node);     // Append <li> to <ul> with id="myList"
+};
+},{"../config/config":249,"../lib/velib":251}],251:[function(require,module,exports){
 "use strict";
 var request = require('request');
 var Promise = require('promise');
@@ -28736,10 +28771,11 @@ module.exports = function(){
             retour += 'Attention la station '+station.nom+' est fermée !';
         }else{
             var bonus = (station.bonus)?' [B]':'';
-            retour += 'Station '+station.nom+' :';
-            retour += 'Vélos : '+station.velos+', places '+bonus+' : '+station.places;
-            retour += 'Dernière maj : '+station.update.toTimeString();
+            retour += station.nom+' : ';
+            retour += ' Vélos : '+station.velos+', places '+bonus+' : '+station.places;
+            retour += ' Dernière maj : '+station.update.toTimeString();
         }
+        return retour;
     };
 };
 
